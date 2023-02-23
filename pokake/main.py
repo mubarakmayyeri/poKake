@@ -11,10 +11,10 @@ container = '.\\uploads'
 # Upload Streamlit and model pickle files
 @bp.route('/', methods=['GET', 'POST'])
 def upload():
+    file = None
     for file in os.listdir(container):
         try:
             file = os.path.join(container, file)
-            flash(file)
             break
         except Exception as e:
             file = None
@@ -35,8 +35,7 @@ def upload():
             flash('Files uploaded successfully...')
             file = streamlit.filename
     
-        if error:
-            flash(error)
+        flash(error)
         
         
     return render_template('/home.html', file=file)
@@ -45,8 +44,7 @@ def upload():
 @bp.route('/compile/<file>', methods=['GET'])
 def compile(file):
     path = os.path.join(container, file)
-    output_filename = "output.pyz"
-    output_filepath = os.path.join(container, output_filename)
+
     try:
         subprocess.run(f"streamlit run {path}", shell=True, check=True)
         subprocess.Popen(f"streamlit run {file}", shell=True)
@@ -66,7 +64,9 @@ def delete():
         try:
             path = os.path.join(container, file)
             os.remove(path)
-            flash(f'{file} deleted...')
         except:
-            flash('Error occured')
+            flash('Error occurred')
+    flash('Files deleted successfully...')
+    
+    
     return redirect(url_for('.upload'))

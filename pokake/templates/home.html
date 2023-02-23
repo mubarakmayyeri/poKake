@@ -1,26 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>poKake</title>
-</head>
-<body>
-	
+{% extends 'base.html' %}
+
+{% block header %}
+	<h3>{% block title %}
+			{% if not file %}
+				Upload Files
+			{% else %}
+				Run the App
+			{% endif %}
+		{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
 	{% if not file %}
 	<form method="POST" enctype="multipart/form-data">
 		
-		<h4>Upload Streamlit Script</h4>
+		<h4>Streamlit Script:</h4>
 		<input type="file" name="streamlit">
-    	<h4>Upload Modle Pickle</h4>
+    	<h4>Model Pickle:</h4>
 		<input type="file" name="model">
-		<button type="submit">Upload</button>
+		<button type="submit" class="upload">Upload</button>
 		
 	</form>
-	{% for message in get_flashed_messages() %}
-	<div class="flash">{{ message }}</div>
-	  {% endfor %}
 	{% else %}
 	<a href="{{ url_for('.compile', file=file) }}"><button type="button">Compile</button></a>
-	<a href="{{ url_for('.delete') }}"><button type="button">Remove</button></a>
+	<a href="{{ url_for('.delete') }}"><button type="button">Remove Files</button></a>
 	{% endif %}
-</body>
-</html>
+{% endblock %}
