@@ -4,16 +4,23 @@
 	<title>poKake</title>
 </head>
 <body>
+	{% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  	{% endfor %}
+
+	{% if not file %}
 	<form method="POST" enctype="multipart/form-data">
+		
 		<h4>Upload Streamlit Script</h4>
 		<input type="file" name="streamlit">
     	<h4>Upload Modle Pickle</h4>
 		<input type="file" name="model">
 		<button type="submit">Upload</button>
-		<a href=""><button type="submit">Compile</button></a>
+
 	</form>
-	{% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
+	{% else %}
+	<a href="{{ url_for('.compile', file=file) }}"><button type="button">Compile</button></a>
+	<a href="{{ url_for('.delete') }}"><button type="button">Remove</button></a>
+	{% endif %}
 </body>
 </html>

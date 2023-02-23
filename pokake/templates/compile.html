@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Streamlit App Running</title>
+    </head>
+    <body>
+        <h1>Streamlit App {{file}} is Running</h1>
+        <p>Check the terminal where Flask is running to see the output.</p>
+    </body>
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  	{% endfor %}
+</html>
