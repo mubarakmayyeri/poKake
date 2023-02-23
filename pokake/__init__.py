@@ -2,13 +2,14 @@ import os
 
 from flask import Flask
 from os import environ
+from . import main
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=environ.get('SECRET_KEY'),
-        DATABASE=os.path.join(app.instance_path, 'pokake.sqlite'),
+        UPLOAD_FOLDER =environ.get('UPLOAD_FOLDER')
     )
 
     if test_config is None:
@@ -23,6 +24,8 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    
+    app.register_blueprint(main.bp)
     
 
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>poKake</title>
+</head>
+<body>
+	<form method="POST" enctype="multipart/form-data">
+		<h4>Upload Streamlit Script</h4>
+		<input type="file" name="streamlit">
+    	<h4>Upload Modle Pickle</h4>
+		<input type="file" name="model">
+		<button type="submit">Upload</button>
+		<a href=""><button type="submit">Compile</button></a>
+	</form>
+	{% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+</body>
+</html>
