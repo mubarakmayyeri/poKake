@@ -6,15 +6,15 @@ import os
 
 bp = Blueprint('/', __name__)
 
-container = '.\\uploads'
+CONTAINER = '.\\uploads'
 
 # Upload Streamlit and model pickle files
 @bp.route('/', methods=['GET', 'POST'])
 def upload():
     file = None
-    for file in os.listdir(container):
+    for file in os.listdir(CONTAINER):
         try:
-            file = os.path.join(container, file)
+            file = os.path.join(CONTAINER, file)
             break
         except Exception as e:
             file = None
@@ -30,12 +30,16 @@ def upload():
             error = 'Model file is required!!!'
         
         if error is None:
-            streamlit.save(os.path.join(container, streamlit.filename))
-            model.save(os.path.join(container, model.filename))
+            streamlit.save(os.path.join(CONTAINER, streamlit.filename))
+            model.save(os.path.join(CONTAINER, model.filename))
             flash('Files uploaded successfully...')
-            file = streamlit.filename
-    
-        flash(error)
+            
+            if 'py' in streamlit.filename.lower():
+                file = streamlit.filename
+            else:
+                file = model.filename
+        else:
+            flash(error)
         
         
     return render_template('/home.html', file=file)
@@ -43,14 +47,14 @@ def upload():
 # Compile and run the Streamlit app
 @bp.route('/compile/<file>', methods=['GET'])
 def compile(file):
-    path = os.path.join(container, file)
+    path = os.path.join(CONTAINER, file)
 
     try:
         subprocess.run(f"streamlit run {path}", shell=True, check=True)
         subprocess.Popen(f"streamlit run {file}", shell=True)
         
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+        flash('An error is occurred!!!')
     
     
     
@@ -60,9 +64,9 @@ def compile(file):
 # Remove files from container
 @bp.route('/delete')
 def delete():
-    for file in os.listdir(container):
+    for file in os.listdir(CONTAINER):
         try:
-            path = os.path.join(container, file)
+            path = os.path.join(CONTAINER, file)
             os.remove(path)
         except:
             flash('Error occurred')

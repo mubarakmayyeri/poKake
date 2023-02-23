@@ -7,7 +7,5 @@
 {% block content %}
     <h1>Streamlit App {{file}} is Running</h1>
     <p>Check the terminal where Flask is running to see the port address.</p>
-    {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
   	{% endfor %}
 {% endblock %}
